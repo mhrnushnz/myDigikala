@@ -20,6 +20,7 @@ use App\Livewire\Admin\Order\Details as orderDetails;
 use App\Livewire\Admin\Transaction\Index as transactionIndex;
 use App\Livewire\Admin\Auth\Index as authIndexAdmin;
 use App\Livewire\Admin\User\Index as userIndex;
+use App\Livewire\Admin\AdminUser\Index as adminUserIndex;
 //-------------------------------------------------------------------
 use App\Livewire\Seller\Auth\Index as authIndexSeller;
 //-------------------------------------------------------------------
@@ -58,7 +59,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/order/{order}', orderDetails::class)->name('admin.order.details');
     Route::get('/transaction', transactionIndex::class)->name('admin.transaction.index');
     Route::get('/user', userIndex::class)->name('admin.user.index');
-
+    Route::get('/admin_user', adminUserIndex::class)->name('admin.admin_user.index');
 });
 
 

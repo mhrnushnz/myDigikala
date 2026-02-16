@@ -32,7 +32,7 @@
                             <a href="{{ route('admin.user.index') }}"> مشتریان </a>
                         </li>
                         <li>
-                            <a href="apps_mailbox.html"> ادمین ها </a>
+                            <a href="{{ route('admin.admin_user.index') }}"> ادمین ها </a>
                         </li>
                         <li>
                             <a href="apps_todoList.html"> فروشندگان </a>
