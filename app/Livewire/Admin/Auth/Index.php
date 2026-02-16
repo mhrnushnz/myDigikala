@@ -45,7 +45,7 @@ class Index extends Component{
     public function Logout(){
         session()->flush();                            //1.حذف سشن
         Auth::guard('admin')->logout();   //2.خروج ادمین از حساب کاربری اگر گارد ادمین رو مشخص نمیکردیم اگر کاربر لاگ اوت میگرد میدلور آس از گارد پیش فرض که web هست که از مدل user پروایدر میکنه حذف میکرد ینی کاربر از سمت کلاینت هم لاگ اوت میشد!
-        return redirect()->route('home');    //3.رفتن به صفحه مورد نظر
+        return redirect()->route('admin.auth.index');    //3.رفتن به صفحه مورد نظر
     }
 
 

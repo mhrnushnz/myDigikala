@@ -52,12 +52,15 @@
                     </td>
                     <td class="text-danger">{{number_format($order->amount)}}</td>
                     <td class="text-center">
+                        @role('order admin')
                         <select class="form-control bg-{{$order->statusColor}}" wire:change="changeStatus({{$order->id}}, $event.target.value)">
                             <option value="pending"  {{$order->status == 'pending'? 'selected' : ''}}>pending</option>
                             <option value="processing " {{$order->status == 'processing'? 'selected' : ''}}>processing</option>
                             <option value="completed"  {{$order->status == 'completed'? 'selected'  : ''}}>completed</option>
                             <option value="cancel"  {{$order->status == 'cancel'? 'selected' : ''}}>cancel</option>
                         </select>
+                        @endrole
+
                     </td>
 
                     <td><a class="bg-primary rounded-pill p-1 text-center" href="{{route('admin.order.details', $order->id) }}">جزئیات سفارش</a></td>

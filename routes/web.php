@@ -20,6 +20,7 @@ use App\Livewire\Admin\Order\Details as orderDetails;
 use App\Livewire\Admin\Transaction\Index as transactionIndex;
 use App\Livewire\Admin\Auth\Index as authIndexAdmin;
 use App\Livewire\Admin\User\Index as userIndex;
+use App\Livewire\Admin\AdminUser\Index as adminUserIndex;
 //-------------------------------------------------------------------
 use App\Livewire\Seller\Auth\Index as authIndexSeller;
 //-------------------------------------------------------------------
@@ -38,27 +39,27 @@ Route::get('/auth/admin', authIndexAdmin::class)->name('admin.auth.index')->midd
 Route::get('/auth/admin/logout', [authIndexAdmin::class, 'Logout'])->name('admin.auth.logout')->middleware('auth:admin');       //میدل ور گست اینجا برای اینه که اگر کاربر لاگین کرد
 
 Route::middleware(['auth:admin'])->group(function () {
-    Route::get('/dashboard', DashboardIndex::class)->name('admin.dashboard.index');
-    Route::get('/country', CountryIndex::class)->name('admin.country.index');
-    Route::get('/state', StateIndex::class)->name('admin.state.index');
-    Route::get('/city', CityIndex::class)->name('admin.city.index');
-    Route::get('/category', CategoryIndex::class)->name('admin.category.index');
-    Route::get('/features/{category?}/{categoryId}', Features::class)->name('admin.features.index');
-    Route::get('/category/features_value/{categoryFeature}', FeatureValue::class)->name('admin.features_value.index');
-    Route::get('/product/create', Create::class)->name('admin.product_create.index');
-    Route::get('/product/index', Index::class)->name('admin.product.index');
-    Route::get('/product/features/{product}', ProductFeatures::class)->name('admin.product.features');
-    Route::get('/product/content/{product}', Content::class)->name('admin.product.content');
-    Route::get('/product/ck-upload/{productId}', CkUpload::class)->name('admin.product.ck-upload');
-    Route::get('/delivery/index', DeliveryIndex::class)->name('admin.delivery.index');
-    Route::get('/payment/index', IndexPayment::class)->name('admin.payment.index');
-    Route::get('/story', StoryIndex::class)->name('admin.story.index');
-    Route::get('/slider', SliderIndex::class)->name('admin.slider.index');
-    Route::get('/order', orderIndex::class)->name('admin.order.index');
-    Route::get('/order/{order}', orderDetails::class)->name('admin.order.details');
-    Route::get('/transaction', transactionIndex::class)->name('admin.transaction.index');
-    Route::get('/user', userIndex::class)->name('admin.user.index');
-
+    Route::get('/dashboard', DashboardIndex::class)->name('admin.dashboard.index')->middleware(['role:super admin|product admin|order admin']);
+    Route::get('/country', CountryIndex::class)->name('admin.country.index')->middleware(['role:super admin|product admin|order admin']);
+    Route::get('/state', StateIndex::class)->name('admin.state.index')->middleware(['role:super admin|product admin|order admin']);
+    Route::get('/city', CityIndex::class)->name('admin.city.index')->middleware(['role:super admin|product admin|order admin']);
+    Route::get('/category', CategoryIndex::class)->name('admin.category.index')->middleware(['role:product admin|super admin']);
+    Route::get('/features/{category?}/{categoryId}', Features::class)->name('admin.features.index')->middleware(['role:product admin|super admin']);
+    Route::get('/category/features_value/{categoryFeature}', FeatureValue::class)->name('admin.features_value.index')->middleware(['role:product admin|super admin']);
+    Route::get('/product/create', Create::class)->name('admin.product_create.index')->middleware(['role:product admin|super admin']);
+    Route::get('/product/index', Index::class)->name('admin.product.index')->middleware(['role:product admin|super admin']);
+    Route::get('/product/features/{product}', ProductFeatures::class)->name('admin.product.features')->middleware(['role:product admin|super admin']);
+    Route::get('/product/content/{product}', Content::class)->name('admin.product.content')->middleware(['role:product admin|super admin']);
+    Route::get('/product/ck-upload/{productId}', CkUpload::class)->name('admin.product.ck-upload')->middleware(['role:product admin|super admin']);
+    Route::get('/delivery/index', DeliveryIndex::class)->name('admin.delivery.index')->middleware(['role:super admin|order admin']);
+    Route::get('/payment/index', IndexPayment::class)->name('admin.payment.index')->middleware(['role:super admin']);
+    Route::get('/story', StoryIndex::class)->name('admin.story.index')->middleware(['role:super admin']);
+    Route::get('/slider', SliderIndex::class)->name('admin.slider.index')->middleware(['role:super admin']);
+    Route::get('/order', orderIndex::class)->name('admin.order.index')->middleware(['role:order admin|super admin|product admin']);
+    Route::get('/order/{order}', orderDetails::class)->name('admin.order.details')->middleware(['role:order admin|super admin|product admin']);
+    Route::get('/transaction', transactionIndex::class)->name('admin.transaction.index')->middleware(['role:order admin|super admin']);
+    Route::get('/user', userIndex::class)->name('admin.user.index')->middleware(['role:super admin|product admin|order admin']);
+    Route::get('/admin_user', adminUserIndex::class)->name('admin.admin_user.index')->middleware(['role:super admin|product admin|order admin']);
 });
 
 
