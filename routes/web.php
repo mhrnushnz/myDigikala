@@ -24,7 +24,7 @@ use App\Livewire\Admin\AdminUser\Index as adminUserIndex;
 //-------------------------------------------------------------------
 use App\Livewire\Seller\Auth\Index as authIndexSeller;
 //-------------------------------------------------------------------
-use App\Livewire\Client\Auth\Index as ClientIndex;
+use App\Livewire\Client\Auth\Index as AuthIndex;
 use App\Livewire\Client\Home\Home as ClientHome;
 use App\Livewire\Client\Payment\Callback as PaymentCallback;
 use App\Livewire\Client\Product\Index as ClientProduct;
@@ -78,9 +78,9 @@ Route::get('/client/product/{p_code?}/{slug?}', ClientProduct::class)->name('cli
 //صفحه هایی که کاربر به صورت مهمان(بدون لاگین کردن) دست رسی داره
 //میدلور گست (مهمان) ینی کاربر بدون لاگین کردن میتونه اون صفحه هارو ببینه و نیازی به لاگین کردنش نیست
 Route::middleware('guest')->group(function () {
-    Route::get('/auth', ClientIndex::class)->name('client.auth.index');         //زمانی که کاربر لاگین کرد به صورت مهمان دیگه صفحه ورود نمایش داده نشه بلکه صفحه اصلی بیاد
-    Route::get('/auth/gmail', [ClientIndex::class, 'redirectToProvider'])->name('gmail');         //زمانی که کاربر لاگین کرد به صورت مهمان دیگه صفحه ورود نمایش داده نشه بلکه صفحه اصلی بیاد
-    Route::get('/auth/gmail/callback', [ClientIndex::class, 'handelProviderCallback'])->name('callback');         //زمانی که کاربر لاگین کرد به صورت مهمان دیگه صفحه ورود نمایش داده نشه بلکه صفحه اصلی بیاد
+    Route::get('/auth', AuthIndex::class)->name('client.auth.index');         //زمانی که کاربر لاگین کرد به صورت مهمان دیگه صفحه ورود نمایش داده نشه بلکه صفحه اصلی بیاد
+    Route::get('/gmail', [AuthIndex::class, 'redirectToProvider'])->name('gmail');         //زمانی که کاربر لاگین کرد به صورت مهمان دیگه صفحه ورود نمایش داده نشه بلکه صفحه اصلی بیاد
+    Route::get('/auth/gmail/callback', [AuthIndex::class, 'handelProviderCallback'])->name('callback');         //زمانی که کاربر لاگین کرد به صورت مهمان دیگه صفحه ورود نمایش داده نشه بلکه صفحه اصلی بیاد
 });
 
 

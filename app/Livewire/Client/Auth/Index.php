@@ -1,48 +1,63 @@
 <?php
 namespace App\Livewire\Client\Auth;
+use App\Models\User;
+use App\Notification\channels\SmsChannel;
+use App\Notifications\sendSmsNotification;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Livewire\Component;
 
 
 class Index extends Component{
-    public $email_number;
-
-
-
-    public function login(){
-
-        $this->validate([
-            'email_number' => 'required|min:5|max:50'
-        ]);
-
-        // چک می‌کنیم کاربر وجود دارد یا نه
-        $user = \App\Models\User::firstOrCreate(
-            ['email' => $this->email_number], // یا phone
-            ['password' => bcrypt('password')] // برای تست
-        );
-
-        // لاگین کاربر
-        \Illuminate\Support\Facades\Auth::login($user);
-
-        // ریدایرکت
-        return redirect()->route('home');
-    }
-
-
-
+    public $mobile;
 
 
     public function redirectToProvider(){
-
         return Socialite::driver('google')->redirect();
-
     }
+
 
 
     public function handelProviderCallback(){
         $gmailUser = Socialite::driver('google')->stateless()->user();
-        return Socialite::driver('google')->redirect();
+        $this->checkUser($gmailUser);
+
+        return redirect()->route('client.auth.index');
+    }
+
+
+    public function checkUser($gmailUser){
+        $existUser = User::query()->where('email', $gmailUser['email'])->first();
+
+        if(!$existUser){
+            $newUser = User::query()->updateOrCreate([
+                'email' => $gmailUser['email'],
+                ],[
+                'name' => $gmailUser['name'],
+                ]);
+
+            Auth::login($newUser, true);          //این true برای اینه که اگر کاربر لاگین کرد اطلاعاتش ذخیره شه و دوباره لاگین نکنه
+        } else{
+
+            Auth::login($existUser, true);
+        }
+    }
+
+    public function sendSms(){
+        $validator = $this->validate([
+            'mobile' => ['required','regex:/^09\d{9}$/']
+        ],[
+            'required' => 'شماره موبایل الزامی است',
+            'regex' => 'شماره موبایل نامعتبراست'
+        ]);
+
+        $this->reset('mobile');
+
+        $activeCode = mt_rand(1000, 10000);
+
+        //ارسال نوتیفیکیشن به کاربر
+        Notification::route(SmsChannel::class, 'sms')->notify(new sendSmsNotification($validator['mobile'], 'Ghasedak', $activeCode ));
     }
 
 

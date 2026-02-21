@@ -24,8 +24,12 @@
         <p class="my-3">لطفا شماره موبایل یا ایمیل خود را وارد کنید</p>
     </div>
     <div>
-        <form wire:submit.prevent="login" method="get" autocomplete="on" class="d-flex flex-column align-items-center justify-content-center gap-3 mb-4">
-            <input type="text" minlength="11" maxlength="50" wire:model="email_number" class="w-100 py-2 rounded-3 border border-danger" />
+        <form wire:submit.prevent="sendSms" method="get" autocomplete="on" class="d-flex flex-column align-items-center justify-content-center gap-3 mb-4">
+            <input name="mobile" type="text" minlength="11" maxlength="50" wire:model="mobile" class="w-100 py-2 rounded-3 border border-danger" />
+            @error("mobile")
+            <div class="w-100 alert alert-danger">{{ $message }}</div>
+            @enderror
+
             <input  type="submit" value="ورود" class="w-100 py-2 btn btn-danger" />
         </form>
 
