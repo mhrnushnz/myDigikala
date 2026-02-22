@@ -1,15 +1,9 @@
 <?php
 namespace App\Notifications;
-use App\Models\User;
-use App\Notification\channels\SmsChannel;
-use Ghasedak\DataTransferObjects\Request\InputDTO;
-use Ghasedak\DataTransferObjects\Request\ReceptorDTO;
-use Ghasedaksms\GhasedaksmsLaravel\Message\GhasedaksmsVerifyLookUp;
+use App\Notifications\channels\SmsChannel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Carbon;
+
 
 //از اینجا باید پارامتر هارو پاس بدیم به چنلی که ساختیم
 class sendSmsNotification extends Notification
@@ -32,13 +26,12 @@ class sendSmsNotification extends Notification
 
 
 
-
     /**
      * Get the notification's delivery channels.
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array                               //چنل رو باید مشخص کنیم مثلا ایجا
+    public function via(): array                               //چنل رو باید مشخص کنیم مثلا ایجا
 //خودش به صورت پیش فرض گفته از طریق ایمیل ارسال شه ولی ما میخوایم از طریق پیامک باشه پس اسم چنلی که ساختیمو میدیم
     {
         return [SmsChannel::class];
@@ -51,7 +44,7 @@ class sendSmsNotification extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toSms(object $notifiable)        //اسمشو ازtoMail به toSms تغییر میدیم
+    public function toSms()        //اسمشو ازtoMail به toSms تغییر میدیم
     {                                              //مشخص میکنه از طریق کدوم چنل ارسال بشه
         return [
             'mobile' => $this->mobile,

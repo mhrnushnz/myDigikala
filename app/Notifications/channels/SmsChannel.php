@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notification\channels;
+namespace App\Notifications\channels;
 use Ghasedak\GhasedakSmsApi;
 use Illuminate\Notifications\Notification;
 
@@ -18,6 +18,7 @@ class SmsChannel{
             $message['template'],
             $message['parameters']
         );
+
 
         if ($response->result->code == 200) {
             return true;

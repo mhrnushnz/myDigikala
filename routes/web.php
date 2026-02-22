@@ -89,7 +89,7 @@ Route::middleware('guest')->group(function () {
 //صفحه پرووفایل و صفحه سبد خرید اطلاعات رو بر اساس user_id برمیگردونه!برای همین بهشون middleware auth رو اعمال میکنیم ینی حتما کاربر باید لاگین کنه
 // تا بتونه اون صفحه هارو ببینه و میدلور آس خودش به صورتت پیش فرض جوری تنظیم شده که بره صفحه ورود رو اجرا کنه ینی نیاز نیستت تو فایل app.php بریم کد کاستوم بزنیم
 Route::middleware('auth' )->group(function () {
-    Route::get('/logout', [ClientIndex::class,'clientLogout'])->name('client.auth.logout');
+    Route::get('/logout', [AuthIndex::class,'clientLogout'])->name('client.auth.logout');
 
 
 });

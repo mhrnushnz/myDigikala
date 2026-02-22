@@ -2,7 +2,6 @@
 namespace App\Livewire\Admin\AdminUser;
 use App\Models\Admin;
 use Livewire\Component;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
