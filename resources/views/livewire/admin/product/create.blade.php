@@ -1,17 +1,19 @@
-<div class="row p-5">
-    <form wire:submit.prevent="submit" class="col-8 flex justify-content-between">
+<div class="row w-100 p-5">
+
+    <form wire:submit.prevent="submit" class="col-12 w-100 d-flex justify-content-between">
         <div class="col-8">
-            <div>
+            <div class="flex">
 
 
                 {{--     name       --}}
                 <div class="form-group mb-4">
                     <label class="" for="seller">نام محصول"</label>
                     <input wire:model.live.debunce.1500ms="name"  name="name" type="text" class="form-control"> {{--  برای لایوایر باید اینجوری بنویسیم که بفرسته به بکند و توی اینپوت اسلاگ نمایش بده --}}
+
                     @error('name')
-                    <div class="alert alert-danger mb-4" role="alert" wire:loading.remove>     {{--  از وایر دات لودینگ ریمو استفاده میکنیم که زمانی که دو باره ارور خواست نمایش داده شه در حد چند صدم ثانیع حذف بشه و دوباره نمایش داده شه --}}
+                    <div class="alert alert-danger alert-dismissible mt-2" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
-                        <strong>خطا!</strong> {{ $message }}
+                        <strong>خطا!</strong>{{ $message }}
                     </div>
                     @enderror
                 </div>
@@ -22,9 +24,9 @@
                     <label class="" for="seller">اسلاگ</label>
                     <input wire:model="slug"  name="slug" type="text" class="form-control">
                     @error('slug')
-                    <div class="alert alert-danger mb-4" role="alert" wire:loading.remove>     {{--  از وایر دات لودینگ ریمو استفاده میکنیم که زمانی که دو باره ارور خواست نمایش داده شه در حد چند صدم ثانیع حذف بشه و دوباره نمایش داده شه --}}
+                    <div class="alert alert-danger alert-dismissible mt-2" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
-                        <strong>خطا!</strong> {{ $message }}
+                        <strong>خطا!</strong>{{ $message }}
                     </div>
                     @enderror
                 </div>
@@ -34,10 +36,10 @@
                 <div class="form-group mb-4">
                     <label class="" for="seller">عنوان متا</label>
                     <input wire:model="meta_title"  name="meta_title" type="text" class="form-control">
-                    @error('meta_title')
-                    <div class="alert alert-danger mb-4" role="alert" wire:loading.remove>     {{--  از وایر دات لودینگ ریمو استفاده میکنیم که زمانی که دو باره ارور خواست نمایش داده شه در حد چند صدم ثانیع حذف بشه و دوباره نمایش داده شه --}}
+                    @error('meta-title')
+                    <div class="alert alert-danger alert-dismissible mt-2" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
-                        <strong>خطا!</strong> {{ $message }}
+                        <strong>خطا!</strong>{{ $message }}
                     </div>
                     @enderror
                 </div>
@@ -48,33 +50,51 @@
                     <label class="" for="seller">توضیحات متا</label>
                     <input wire:model="meta_description" name="meta_description" type="text" class="form-control">
                     @error('meta_description')
-                    <div class="alert alert-danger mb-4" role="alert" wire:loading.remove>     {{--  از وایر دات لودینگ ریمو استفاده میکنیم که زمانی که دو باره ارور خواست نمایش داده شه در حد چند صدم ثانیع حذف بشه و دوباره نمایش داده شه --}}
+                    <div class="alert alert-danger alert-dismissible mt-2" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
-                        <strong>خطا!</strong> {{ $message }}
+                        <strong>خطا!</strong>{{ $message }}
                     </div>
                     @enderror
                 </div>
 
             </div>
-
-
             {{--     image      --}}
             <div class=" flex-wrap ">
                 <div x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true" x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-cancel="uploading = false" x-on:livewire-upload-error="uploading = false" x-on:livewire-upload-progress="progress = $event.detail.progress" class="custom-file-container" data-upload-id="myFirstImage">
                     <div x-show="uploading">
                         <progress max="100" x-bind:value="progress"></progress>
                     </div>
+
+
+
+
                     <label for="img_p" >اپلود تصاویر محصول</label>
                     <br>
-                    <input id="img_p" type="file" wire:model="images" name="images" multiple accept="image/*">
-                    @error('images.*')
-                    <span class="error">{{ $message }}</span>
+                    <input class="form-control" type="file" wire:model="photos" name="photos" multiple >
+
+                    {{-- نمایش تصاویره انتخاب شده در ادمین --}}
+                    <div class="d-flex">
+                        @foreach($photos as $photo)
+                            @if(in_array($photo->getMimeType(), ['image/jpeg, image/png, image/jpg, image/gif, image/svg, image/webp']))
+                                <div class="item w-25 m-2">
+                                    <img class="w-100" src="{{ $photo->temporaryUrl() }}" alt="">
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                    @error('photos')
+                    <div class="alert alert-danger alert-dismissible mt-2" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                        <strong>خطا!</strong>{{ $message }}
+                    </div>
                     @enderror
                 </div>
-                    <div class="d-flex flex-wrap">
-                        @foreach($images as $index => $image) {{--  از این طریق  index  میتونیم به جایگاه تصویر هم دست رسی داشته باشیم   --}}
+
+
+                <div class="d-flex flex-wrap">
+                        @foreach($photos as $index => $photo) {{--  از این طریق  index  میتونیم به جایگاه تصویر هم دست رسی داشته باشیم   --}}
                             <div class="item m-2 w-25 flex-wrap">
-                            @if($image instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
+                            @if($photo instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
                                     <img src="{{ asset('storage/'.$image_p->path) }}" alt=""/>
                             @endif
                             <div class="flex justify-content-between items-center bg-dark  rounded">
@@ -136,6 +156,8 @@
                 @endif
             </div>
         </div>
+
+
 
         <div class="col-4">
 

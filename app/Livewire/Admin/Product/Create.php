@@ -6,6 +6,7 @@ use App\Models\ProductImage;
 use App\Models\Seller;
 use App\Repositories\admin\ProductRepository;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -14,7 +15,8 @@ class Create extends Component{
 
     public $sellers= [];
     public $categories= [];
-    public $images=[];
+    #[Validate(['photos.*' => 'image|max:1024'])]
+    public $photos=[];
     public $name;
     public $slug;
     public $featured;
@@ -75,14 +77,16 @@ class Create extends Component{
         }else{
             $this->featured = false;
         }
+
         $validatedData['coverIndex'] = $this->coverIndex;
+        $validatedData['photos'] = $this->photos;
 //نحوه فعل و غیر فعال بودن محصول ویژه
         $validatedData =  $this->validate( [
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:1024',
+            'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:1024',
             'name' => 'required|string',
             'slug' => 'required|string',
-            'meta_title' => 'nullable|string',
-            'meta_description' => 'nullable|string',
+            'meta_title' => 'required|string',
+            'meta_description' => 'required|string',
             'price' => 'required|integer',
             'discount' => 'nullable|integer',
             'stock' => 'required|integer',
@@ -100,19 +104,13 @@ class Create extends Component{
             '*.min' => ' حداکثر تعداد کاراکتر ها 50 می باشد',
             'categoryId.exists' => 'ذسته بندی نامعتبر است',
             'sellerId.exists' => 'فروشنده نامعتبر است',
-            'images.*.image' => 'فرمت نامعتبر است ',
+            'photos.*.image' => 'فرمت نامعتبر است ',
             //
         ]);
 
-        $storedImages = [];
-        foreach ($this->images as $image) {
-            if ($image) {
-                $storedImages[] = $image->store('tmp/products', 'public');
-            }
-        }
 
 
-        $this->repository->submit($validatedData, $this->productId, $storedImages, $this->coverIndex); //بهتره که از مدلمون ابجکت بسازیم اونم مخصوصا زمانی که تصویر به دیتابیس میفرستیم چون create/update ومحصول واقعیه بهتره ابجکت رو بسازیم !
+        $this->Prsubmit($validatedData, $this->productId, $this->photos, $this->coverIndex); //بهتره که از مدلمون ابجکت بسازیم اونم مخصوصا زمانی که تصویر به دیتابیس میفرستیم چون create/update ومحصول واقعیه بهتره ابجکت رو بسازیم !
         $this->dispatch('success', 'عملیات با موفقیت انجام شد!');
         $this->reset();
         return redirect()->route('admin.product.index');

@@ -7,7 +7,7 @@ use App\Traits\UploadFile;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Livewire\WithFileUploads;
+
 
 class ProductRepository implements ProductRepositoryInterface{
     use UploadFile;
@@ -50,6 +50,8 @@ class ProductRepository implements ProductRepositoryInterface{
             $this->UploadImageInWebpFormat($image, $productId, 300, 300, 'medium');
             $this->UploadImageInWebpFormat($image, $productId, 800, 800, 'large');
         }
+
+
     }
 
     public function submitToProduct($validatedData, $productId){
