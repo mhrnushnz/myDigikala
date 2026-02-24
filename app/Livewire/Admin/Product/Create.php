@@ -4,9 +4,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Seller;
-use App\Repositories\admin\ProductRepository;
 use Illuminate\Support\Str;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -15,7 +13,6 @@ class Create extends Component{
 
     public $sellers= [];
     public $categories= [];
-    #[Validate(['photos.*' => 'image|max:1024'])]
     public $photos=[];
     public $name;
     public $slug;
@@ -31,12 +28,9 @@ class Create extends Component{
     public $sellerId;
     public $productId;
     public $coverIndex = 0;
-    private $repository;
 
 
-    public function boot(ProductRepository $productRepository){
-        $this->repository = $productRepository;
-    }
+
 
 
     public function mount(){
@@ -63,12 +57,6 @@ class Create extends Component{
         }
     }
 
-
-    public function updatedName(){
-        $this->slug = Str::slug($this->name, '-' , null);
-    }
-
-
     public function submit(){
 
         //بررسی چک باکس
@@ -78,15 +66,15 @@ class Create extends Component{
             $this->featured = false;
         }
 
-        $validatedData['coverIndex'] = $this->coverIndex;
         $validatedData['photos'] = $this->photos;
 //نحوه فعل و غیر فعال بودن محصول ویژه
         $validatedData =  $this->validate( [
-            'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:1024',
+            'photos'   => 'required|array|min:1',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:1024',
             'name' => 'required|string',
             'slug' => 'required|string',
-            'meta_title' => 'required|string',
-            'meta_description' => 'required|string',
+            'meta_title' => 'nullable|string',
+            'meta_description' => 'nullable|string',
             'price' => 'required|integer',
             'discount' => 'nullable|integer',
             'stock' => 'required|integer',
@@ -101,24 +89,38 @@ class Create extends Component{
             '*.required' => 'پر کردن فیلد الزامی است',
             '*.string' => 'فرمت نام اشتباه است',
             '*.integer'=> 'این فیلد باید از نوع عددی باشد',
-            '*.min' => ' حداکثر تعداد کاراکتر ها 50 می باشد',
+            '*.min' => ' حداقل تعداد کاراکتر ها 50 می باشد',
             'categoryId.exists' => 'ذسته بندی نامعتبر است',
             'sellerId.exists' => 'فروشنده نامعتبر است',
             'photos.*.image' => 'فرمت نامعتبر است ',
             //
         ]);
-
-
-
-        $this->Prsubmit($validatedData, $this->productId, $this->photos, $this->coverIndex); //بهتره که از مدلمون ابجکت بسازیم اونم مخصوصا زمانی که تصویر به دیتابیس میفرستیم چون create/update ومحصول واقعیه بهتره ابجکت رو بسازیم !
+        $product = new Product;                      //ساختن یک شی از مدل
+        $product->submit($validatedData, $this->productId, $this->photos, $this->coverIndex); //بهتره که از مدلمون ابجکت بسازیم اونم مخصوصا زمانی که تصویر به دیتابیس میفرستیم چون create/update ومحصول واقعیه بهتره ابجکت رو بسازیم !
         $this->dispatch('success', 'عملیات با موفقیت انجام شد!');
         $this->reset();
         return redirect()->route('admin.product.index');
     }
 
 
+
+    public function updatedName(){
+        $this->slug = Str::slug($this->name, '-' , null);
+    }
+
+
+
     public function setCoverImage($index){
         $this->coverIndex = $index;
+    }
+
+
+    public function removePhoto($index)
+    {
+        if ($index === $this->coverIndex) {
+            $this->coverIndex = null;
+        }
+        array_splice($this->photos, $index, 1);
     }
 
 

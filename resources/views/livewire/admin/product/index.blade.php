@@ -2,7 +2,6 @@
     <div class="table-responsive mb-4 mt-4">
 
         @if(session()->has('success'))
-
             <div class="alert alert-icon-left alert-light-primary mb-4" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg  data-dismiss="alert"> ... </svg></button>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -12,7 +11,6 @@
                 <strong>هشدار!</strong>
                 {{sesstion()->get('success')}}
             </div>
-
         @endif
 
 

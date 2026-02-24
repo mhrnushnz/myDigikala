@@ -1,17 +1,8 @@
 <?php
 namespace App\Livewire\Admin\Product;
 use App\Models\Product;
-use App\Repositories\admin\ProductRepositoryInterface;
 use Livewire\Component;
-
-
 class Index extends Component{
-    protected ProductRepositoryInterface $repository;
-
-    public function mount(ProductRepositoryInterface $repository){
-        $this->repository = $repository;
-    }
-
 
     public function delete(Product $product){
         $this->repository->removeProduct($product);

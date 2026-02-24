@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>digikala</title>
+    <title>داشبورد ادمین دیجیکالا</title>
     @include('layouts.admin.links')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -98,6 +98,7 @@
             }
         });
     </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireScripts
 

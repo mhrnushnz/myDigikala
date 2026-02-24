@@ -99,7 +99,7 @@ $routName = \Illuminate\Support\Facades\Route::current()->getName();         //Ø
 <livewire:client.footer.footer/>
 <!-- Bootstrap JS , Swiper JS , and jQuery -->
 @include('layouts.client.client-js')
-@livewireScripts
+
 
 </body>
 </html>
