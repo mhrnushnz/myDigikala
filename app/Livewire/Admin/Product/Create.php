@@ -4,11 +4,13 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Seller;
+use App\Traits\UploadFile;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class Create extends Component{
+    use UploadFile;
     use WithFileUploads;
 
     public $sellers= [];
@@ -66,7 +68,7 @@ class Create extends Component{
             $this->featured = false;
         }
 
-        $validatedData['photos'] = $this->photos;
+
 //نحوه فعل و غیر فعال بودن محصول ویژه
         $validatedData =  $this->validate( [
             'photos'   => 'required|array|min:1',
@@ -95,6 +97,8 @@ class Create extends Component{
             'photos.*.image' => 'فرمت نامعتبر است ',
             //
         ]);
+
+
         $product = new Product;                      //ساختن یک شی از مدل
         $product->submit($validatedData, $this->productId, $this->photos, $this->coverIndex); //بهتره که از مدلمون ابجکت بسازیم اونم مخصوصا زمانی که تصویر به دیتابیس میفرستیم چون create/update ومحصول واقعیه بهتره ابجکت رو بسازیم !
         $this->dispatch('success', 'عملیات با موفقیت انجام شد!');

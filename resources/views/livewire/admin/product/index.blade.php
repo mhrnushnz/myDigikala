@@ -34,7 +34,7 @@
                 @foreach($products as $product)
                     <tr>
                     <td> {{ $loop->index + 1 }}  </td>
-                    <td> <img src="{{asset('product/'.$product->id.'/small/'.$product->coverImage?->path)}}" alt=""> </td>
+                    <td> <img src="/products/{{$product->id}}/small/{{@$product->coverImage->path}}" alt=""> </td>
                     <td> {{ $product->name }} </td>
                     <td> {{ $product->category?->name }} </td>
                     <td> {{ number_format($product->price )}} </td>

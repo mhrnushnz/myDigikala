@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Livewire\WithFileUploads;
 
 class Product extends Model{
     use UploadFile;
+    use WithFileUploads;
     use SoftDeletes;
     protected $guarded = [];
 
@@ -164,7 +166,7 @@ class Product extends Model{
     }
 
     public function coverImage(){      //یک تصویره
-        return $this->hasOne(ProductImage::class, 'product_id', 'id')->where('is_cover', '=', true);
+        return $this->belongsTo(ProductImage::class, 'product_id', 'id')->where('is_cover', '=', true);
     }
 
     public function Images(){         //چندین تصویره
